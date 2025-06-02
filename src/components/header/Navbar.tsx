@@ -55,7 +55,7 @@ const Navbar = () => {
 
     useEffect(() => {
         getCategories();
-    }, []);
+    }, [getCategories]);
 
     useEffect(() => {
         setTabs([{ slug: 'all', name: 'All', url: '/' }, ...categories]);
@@ -63,6 +63,7 @@ const Navbar = () => {
         if (currentTab) {
             setActiveTab(categories.find((category) => category.slug === currentTab) || null);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [categories]);
 
     const scrollRef = useRef<HTMLDivElement>(null);
