@@ -1,7 +1,7 @@
 'use client';
 import useAuthStore from '@/store/user/useAuthStore';
 import { useEffect, useState } from 'react';
-import styles from '@/styles/Login.module.scss';
+import styles from '@/styles/login/Login.module.scss';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Spinner from '@/components/spinner/Spinner';

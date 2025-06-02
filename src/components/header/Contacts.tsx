@@ -2,7 +2,7 @@
 import React from 'react';
 import useAuthStore from '@/store/user/useAuthStore';
 import { useRouter } from 'next/navigation';
-import styles from '@/styles/Contacts.module.scss';
+import styles from '@/styles/header/Contacts.module.scss';
 import Image from 'next/image';
 
 const Contacts = () => {

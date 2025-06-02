@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import styles from '@/styles/Navbar.module.scss';
+import styles from '@/styles/header/Navbar.module.scss';
 // import { useCategoryStore } from '@/store/product/useCategoryStore';
 import { Category } from '@/types/category';
 import { useRouter } from 'next/navigation';
