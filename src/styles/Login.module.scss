@@ -1,0 +1,177 @@
+$background-color: #f0f0f0;
+$border-color: #ccc;
+
+$input-padding: 0.5rem;
+$input-border-radius: 0.25rem;
+$input-font-size: 1rem;
+$input-color: #333;
+$input-border: 1px solid $border-color;
+$input-effect-border: 1px solid #000;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+
+    h1 {
+        font-size: 2rem;
+        letter-spacing: 0.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        width: 20rem;
+
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            background: $background-color;
+            border: $input-border;
+            border-radius: $input-border-radius;
+            font-size: $input-font-size;
+            color: $input-color;
+
+            &:focus {
+                outline: none;
+                border-color: $input-effect-border;
+            }
+
+            &:hover {
+                border-color: $input-effect-border;
+            }
+        }
+
+        .passwordContainer {
+            position: relative;
+            width: 100%;
+
+            input {
+                padding-right: 2rem;
+                white-space: nowrap;
+            }
+
+            .showPassword {
+                position: absolute;
+                right: 0rem;
+                top: 0;
+                padding: 0.4rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: inherit;
+                border: none;
+                cursor: pointer;
+            }
+        }
+
+        .errorContainer {
+            width: 100%;
+            height: 1rem;
+
+            .error {
+                font-size: 0.8rem;
+                color: rgb(201, 0, 0);
+            }
+        }
+
+        .submitButton {
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            padding: 0.5rem;
+            background: #000;
+            color: #fff;
+            letter-spacing: 0.1rem;
+
+            &:hover {
+                background: #333;
+            }
+
+            &:disabled {
+                cursor: not-allowed;
+                background: #ccc;
+            }
+        }
+
+
+
+    }
+
+    $offset: 187;
+    $duration: 1.4s;
+    
+    .spinner {
+        position: absolute;
+        top: 50%;
+        left: 49%;
+        transform: translate(-50%, -50%);
+        animation: rotator $duration linear infinite;
+    }
+
+    @keyframes rotator {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(270deg);
+        }
+    }
+
+    .path {
+        stroke-dasharray: $offset;
+        stroke-dashoffset: 0;
+        transform-origin: center;
+        animation:
+            dash $duration ease-in-out infinite,
+            colors ($duration*4) ease-in-out infinite;
+    }
+
+    @keyframes colors {
+        0% {
+            stroke: #4285F4;
+        }
+
+        25% {
+            stroke: #DE3E35;
+        }
+
+        50% {
+            stroke: #F7C223;
+        }
+
+        75% {
+            stroke: #1B9A59;
+        }
+
+        100% {
+            stroke: #4285F4;
+        }
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dashoffset: $offset;
+        }
+
+        50% {
+            stroke-dashoffset: $offset/4;
+            transform: rotate(135deg);
+        }
+
+        100% {
+            stroke-dashoffset: $offset;
+            transform: rotate(450deg);
+        }
+    }
+
+}
