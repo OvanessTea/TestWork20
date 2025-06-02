@@ -23,6 +23,8 @@ const Navbar = () => {
             // Have to delete search before setting the category
             // Otherwise, the search will return 404 error
             params.delete('search');
+            // Need to delete skip to avoid pagination error
+            params.delete('skip');
             setSearch('');
             if (category.slug === 'all') {
                 params.delete('category');
@@ -39,6 +41,8 @@ const Navbar = () => {
             // Have to delete category before setting the search
             // Otherwise, the search will return 404 error
             params.delete('category');
+            // Need to delete skip to avoid pagination error
+            params.delete('skip');
             setActiveTab(null);
             if (search) {
                 params.set('search', search);
