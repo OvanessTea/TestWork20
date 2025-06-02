@@ -9,7 +9,6 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 240px;
     background: #ccc;
     z-index: 10;
 }
@@ -19,14 +18,14 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 60px;
+    height: 40px;
     background: #eee;
     z-index: 10;
 }
 
 .layout__content {
-    padding-top: 240px;
-    padding-bottom: 60px;
+    padding-top: 220px;
+    padding-bottom: 10px;
     height: 100%;
     overflow-y: auto;
 
