@@ -11,7 +11,7 @@ import Image from 'next/image';
 import Pagination from '@/components/pagination/Pagination';
 import Spinner from '@/components/spinner/Spinner';
 const App = () => {
-    const { products, getProducts, isLoading, isFetched } = useProductStore((state) => state);
+    const { products, getProducts, isLoading, isFetched, total } = useProductStore((state) => state);
     const searchParams = useSearchParams();
 
     useEffect(() => {
@@ -45,7 +45,7 @@ const App = () => {
                             </motion.div>
                         ))}
                     </div>
-                    {products.length > 0 && <Pagination />}
+                    {total > 12 && <Pagination />}
                 </>
             ) : (
                 <div data-widget="searchResultsError" className={styles.notfound}>
