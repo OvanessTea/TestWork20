@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from '@/styles/Login.module.scss';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Spinner from '@/components/spinner/Spinner';
 
 export default function Login() {
     const { login, user, error, isLoading } = useAuthStore((state) => state);
@@ -70,9 +71,7 @@ export default function Login() {
                 </button>
             </form>
             {isLoading && (
-                <svg className={styles.spinner} width='35px' height='35px' viewBox='0 0 66 66' xmlns='http://www.w3.org/2000/svg'>
-                    <circle className={styles.path} fill='none' strokeWidth='6' strokeLinecap='round' cx='33' cy='33' r='30'></circle>
-                </svg>
+                <Spinner />
             )}
         </div>
     );

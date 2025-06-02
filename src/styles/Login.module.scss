@@ -1,7 +1,7 @@
 $background-color: #f0f0f0;
 $border-color: #ccc;
 
-$input-padding: 0.5rem;
+$input-padding: 0.6rem;
 $input-border-radius: 0.25rem;
 $input-font-size: 1rem;
 $input-color: #333;
@@ -33,7 +33,7 @@ $input-effect-border: 1px solid #000;
 
         input {
             width: 100%;
-            padding: 0.5rem;
+            padding: calc($input-padding - 1px);
             background: $background-color;
             border: $input-border;
             border-radius: $input-border-radius;
@@ -63,7 +63,7 @@ $input-effect-border: 1px solid #000;
                 position: absolute;
                 right: 0rem;
                 top: 0;
-                padding: 0.4rem;
+                padding: $input-padding;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -105,73 +105,4 @@ $input-effect-border: 1px solid #000;
 
 
     }
-
-    $offset: 187;
-    $duration: 1.4s;
-    
-    .spinner {
-        position: absolute;
-        top: 50%;
-        left: 49%;
-        transform: translate(-50%, -50%);
-        animation: rotator $duration linear infinite;
-    }
-
-    @keyframes rotator {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(270deg);
-        }
-    }
-
-    .path {
-        stroke-dasharray: $offset;
-        stroke-dashoffset: 0;
-        transform-origin: center;
-        animation:
-            dash $duration ease-in-out infinite,
-            colors ($duration*4) ease-in-out infinite;
-    }
-
-    @keyframes colors {
-        0% {
-            stroke: #4285F4;
-        }
-
-        25% {
-            stroke: #DE3E35;
-        }
-
-        50% {
-            stroke: #F7C223;
-        }
-
-        75% {
-            stroke: #1B9A59;
-        }
-
-        100% {
-            stroke: #4285F4;
-        }
-    }
-
-    @keyframes dash {
-        0% {
-            stroke-dashoffset: $offset;
-        }
-
-        50% {
-            stroke-dashoffset: $offset/4;
-            transform: rotate(135deg);
-        }
-
-        100% {
-            stroke-dashoffset: $offset;
-            transform: rotate(450deg);
-        }
-    }
-
 }

@@ -6,12 +6,12 @@ import { AxiosError } from 'axios';
 
 interface AuthState {
     user: CurrentUser | null;
+    error: string | null;
+    isLoading: boolean;
     login: (_username: string, _password: string) => Promise<boolean>;
     logout: () => void;
     getProfile: () => Promise<void>;
     refreshToken: () => Promise<void>;
-    error: string | null;
-    isLoading: boolean;
 }
 
 const useAuthStore = create<AuthState>()(
