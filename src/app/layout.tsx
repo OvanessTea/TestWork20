@@ -1,7 +1,4 @@
-export const metadata = {
-  title: 'Abelohost',
-  description: 'Test task 20',
-}
+import '../styles/global.css';
 
 export default function RootLayout({
   children,
@@ -9,8 +6,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body>{children}</body>
     </html>
-  )
+  );
 }

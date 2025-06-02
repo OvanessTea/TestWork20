@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Category } from '@/types/category'
+import { Category } from '@/types/category';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 
 interface CategoryStore {

@@ -1,8 +1,9 @@
-'use client'
+'use client';
 import useAuthStore from '@/store/user/useAuthStore';
 import { useEffect, useState } from 'react';
 import styles from '@/styles/Login.module.scss';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Login() {
     const { login, user, error, isLoading } = useAuthStore((state) => state);
@@ -17,15 +18,15 @@ export default function Login() {
         if (success) {
             router.push('/');
         }
-    }
+    };
 
     useEffect(() => {
         if (user) {
             router.push('/');
         }
-    }, [user]);
+    }, [user, router]);
 
-    if (localStorage.getItem('token')) return null
+    if (localStorage.getItem('token')) return null;
 
     return (
         <div className={styles.container}>
@@ -52,7 +53,7 @@ export default function Login() {
                             className={styles.showPassword}
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            <img src={showPassword ? '/hide_password.svg' : '/show_password.svg'} alt='Show password' />
+                            <Image src={showPassword ? '/hide_password.svg' : '/show_password.svg'} alt='Show password' width={20} height={20}/>
                         </button>
                     </div>
                     <div className={styles.errorContainer}>
@@ -73,5 +74,5 @@ export default function Login() {
                 </svg>
             )}
         </div>
-    )
+    );
 }
