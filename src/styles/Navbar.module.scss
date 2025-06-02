@@ -1,0 +1,42 @@
+@use 'variables' as *;
+
+.wrapper {
+    width: 100%;
+    background-color: #fff;
+    border-bottom: 1px solid #E6EAEF;
+    padding: 20px 0;
+    .container {
+        height: 100%;
+        max-width: $container-width;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .tabs {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        button {
+            padding: 5px 10px;
+            background-color: transparent;
+            border-radius: 5px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            &:hover {
+                border-color: #919191;
+                color: #919191;
+                transition: all 0.3s ease;
+            }
+            &:focus {
+                border-color: rgb(187, 18, 18);
+                color: rgb(187, 18, 18);
+            }
+            &.active {
+                border-color: rgb(105, 15, 15);
+                color: rgb(105, 15, 15);
+            }
+        }
+    }
+}

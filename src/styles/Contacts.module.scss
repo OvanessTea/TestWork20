@@ -1,0 +1,49 @@
+@use 'variables' as *;
+
+.container {
+    width: 100%;
+    padding: 10px 0;
+    background-color: #1E1F29;
+
+    .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: $container-width;
+        margin: 0 auto;
+        color: #fff;
+
+        .contacts {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+
+            .section {
+                display: flex;
+                gap: 5px;
+                align-items: center;
+                img {
+                    color: red;
+                }
+            }
+        }
+
+        .user {
+            button {
+                padding: 0px 5px;
+                border-radius: 5px;
+                display: flex;
+                gap: 5px;
+                align-items: center;
+                background-color: transparent;
+                border: none;
+                color: #fff;
+                cursor: pointer;
+                &:hover {
+                    background-color: #6363635d;
+                }
+            }
+        }
+    }
+}
