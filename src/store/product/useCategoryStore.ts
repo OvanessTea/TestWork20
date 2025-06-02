@@ -1,31 +1,44 @@
 import { create } from 'zustand';
 import { Category } from '@/types/category';
-import { createJSONStorage, devtools, persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import api from '@/lib/axios';
+import { AxiosError } from 'axios';
 
 interface CategoryStore {
     categories: Category[];
-    setCategories: (categories: Category[]) => void;
-    isLoading: boolean;
-    setIsLoading: (isLoading: boolean) => void;
     error: string | null;
-    setError: (error: string | null) => void;
+    isLoading: boolean;
+    getCategories: () => Promise<boolean>;
 }
 
-const useCategoryStore = create<CategoryStore>()(devtools(persist((set) => ({
-    categories: [],
-    setCategories: (categories) => set({ categories }),
-    isLoading: false,
-    setIsLoading: (isLoading) => set({ isLoading }),
-    error: null,
-    setError: (error) => set({ error }),
-}), {
-    name: 'category-store',
-    partialize: (state) => ({ categories: state.categories }),
-    storage: createJSONStorage(() => localStorage),
-}), {
-    name: 'CategoryStore',
-    enabled: process.env.NODE_ENV === 'development',
-}));
+const useCategoryStore = create<CategoryStore>()(
+    persist((set) => ({
+        categories: [],
+        error: null,
+        isLoading: false,
+        getCategories: async () => {
+            try {
+                set({ isLoading: true });
+                const response = await api.get('/products/categories');
+                set({ categories: response.data });
+                return true;
+            } catch (error) {
+                if (error instanceof AxiosError) {
+                    set({ error: error.response?.data.message });
+                } else {
+                    set({ error: 'Failed to fetch categories' });
+                }
+                return false;
+            } finally {
+                set({ isLoading: false });
+            }
+        }
+    }), {
+        name: 'category-storage',
+        storage: createJSONStorage(() => localStorage),
+        partialize: (state) => ({ categories: state.categories }),
+    })
+);
 
 export { useCategoryStore };
 
