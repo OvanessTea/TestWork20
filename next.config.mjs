@@ -11,6 +11,9 @@ const nextConfig = {
     config.resolve.alias['@'] = path.resolve(__dirname);
     return config;
   },
+  images: {
+    domains: [process.env.NEXT_PUBLIC_API_URL, 'cdn.dummyjson.com'],
+  },
 };
 
 export default nextConfig;
