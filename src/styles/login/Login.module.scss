@@ -1,12 +1,4 @@
-$background-color: #f0f0f0;
-$border-color: #ccc;
-
-$input-padding: 0.6rem;
-$input-border-radius: 0.25rem;
-$input-font-size: 1rem;
-$input-color: #333;
-$input-border: 1px solid $border-color;
-$input-effect-border: 1px solid #000;
+@import '../_variables.scss';
 
 .container {
     display: flex;
@@ -30,25 +22,6 @@ $input-effect-border: 1px solid #000;
         justify-content: center;
         gap: 1rem;
         width: 20rem;
-
-        input {
-            width: 100%;
-            padding: calc($input-padding - 1px);
-            background: $background-color;
-            border: $input-border;
-            border-radius: $input-border-radius;
-            font-size: $input-font-size;
-            color: $input-color;
-
-            &:focus {
-                outline: none;
-                border-color: $input-effect-border;
-            }
-
-            &:hover {
-                border-color: $input-effect-border;
-            }
-        }
 
         .passwordContainer {
             position: relative;

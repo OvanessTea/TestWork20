@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import categories from '@/__mocks__/categories.json';
 import { modifyUrl } from '@/utils/modifyUrl';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 
 const Navbar = () => {
     const router = useRouter();
@@ -70,8 +71,16 @@ const Navbar = () => {
                 ))}
             </div>
             <div className={styles.search}>
-                <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
-                <button onClick={() => handleSearch()}>Search</button>
+                <input 
+                    type="text" 
+                    placeholder="Search" 
+                    value={search} 
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()} 
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+                <button className={styles.searchBtn} onClick={() => handleSearch()}>
+                    <Image src="/search.svg" alt="Search" width={20} height={20} />
+                </button>
             </div>
         </div>
     </div>;

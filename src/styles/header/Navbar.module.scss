@@ -39,4 +39,32 @@
             }
         }
     }
+    .search {
+        position: relative;
+        width: 200px;
+        input {
+            height: 30px;
+            &:focus {
+                outline: none;
+                border-color: $input-effect-border;
+            }
+
+            &:hover {
+                border-color: $input-effect-border;
+            }
+        }
+        .searchBtn {
+            position: absolute;
+            right: 0rem;
+            top: 0;
+            padding: $input-padding / 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: inherit;
+            border: none;
+            cursor: pointer;
+        }
+
+        }
 }

@@ -1,5 +1,5 @@
 export const formatParams = (searchParams: URLSearchParams) => {
-    if (searchParams.size === 0) return '';
+    if (searchParams.size === 0) return '?';
     
     const obj = Object.fromEntries(searchParams.entries());
     let params = '';
@@ -9,8 +9,14 @@ export const formatParams = (searchParams: URLSearchParams) => {
 
         delete obj.category;
     }
-    
-    params += '?';
+
+    if (searchParams.get('search')) {
+        params += `/search?q=${searchParams.get('search')}`;
+
+        delete obj.search;
+    } else {
+        params += '?';
+    }
 
     for (const [key, value] of Object.entries(obj)) {
         params += `${key}=${value}&`;
