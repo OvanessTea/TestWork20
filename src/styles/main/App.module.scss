@@ -1,44 +1,77 @@
-.container {
-    padding: 50px;
+.layout {
+    height: 100vh;
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    align-items: stretch;
-    width: 100%;
+    flex-direction: column;
+}
+
+.layout__header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 240px;
+    background: #ccc;
+    z-index: 10;
+}
+
+.layout__footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #eee;
+    z-index: 10;
+}
+
+.layout__content {
+    padding-top: 240px;
+    padding-bottom: 60px;
     height: 100%;
-    min-height: 100vh;
+    overflow-y: auto;
 
-    .notfound {
+    .container {
+        padding: 50px;
         display: flex;
-        margin-bottom: 20px;
-        margin-top: 20px;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        align-items: stretch;
+        width: 100%;
 
-        &__icon {
-            margin-right: 24px;
-            min-width: 48px;
-            width: 48px;
+        .notfound {
+            display: flex;
+            margin-bottom: 20px;
+            margin-top: 20px;
 
-            img {
-                max-width: 100%;
+            &__icon {
+                margin-right: 24px;
+                min-width: 48px;
+                width: 48px;
+
+                img {
+                    max-width: 100%;
+                }
             }
-        }
 
-        &__text {
-            color: #070707;
-            font-size: 16px;
-            line-height: 1.38;
-            max-width: 520px;
-        }
-
-        &__link {
-            font-size: 16px;
-            margin-top: 8px;
-            a {
-                text-decoration: none;
-                color: #005bff;
+            &__text {
+                color: #070707;
+                font-size: 16px;
+                line-height: 1.38;
+                max-width: 520px;
             }
-        }
 
+            &__link {
+                font-size: 16px;
+                margin-top: 8px;
+
+                a {
+                    text-decoration: none;
+                    color: #005bff;
+                }
+            }
+
+        }
     }
+
 }
