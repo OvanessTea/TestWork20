@@ -26,7 +26,8 @@ export default function Login() {
         }
     }, [user, router]);
 
-    if (localStorage.getItem('token')) return null;
+    // prevent ui rendering before auto renavigating
+    if (typeof window === 'undefined' || localStorage.getItem('token')) return null;
 
     return (
         <div className={styles.container}>
