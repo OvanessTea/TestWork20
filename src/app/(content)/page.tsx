@@ -8,8 +8,10 @@ import { motion } from 'framer-motion';
 import styles from '@/styles/main/App.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
+import Pagination from '@/components/pagination/Pagination';
+import Spinner from '@/components/spinner/Spinner';
 const App = () => {
-    const { products, getProducts } = useProductStore((state) => state);
+    const { products, getProducts, isLoading, isFetched } = useProductStore((state) => state);
     const searchParams = useSearchParams();
 
     useEffect(() => {
@@ -17,19 +19,35 @@ const App = () => {
         getProducts(formattedParams);
     }, [searchParams, getProducts]);
 
+    if (!isFetched || isLoading) {
+        return (
+            <div className={styles.container}>
+                <Spinner />
+            </div>
+        );
+    }
+
     return (
         <div className={styles.container}>
-            {products.length > 0 ? products.map((product) => (
-                <motion.div
-                    key={product.id}
-                    animate={{ opacity: 1 }}
-                    initial={{ opacity: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <ProductCard product={product} />
-                </motion.div>
-            )) : (
+
+            {products.length > 0 ? (
+                <>
+                    <div className={styles.container__products}>
+                        {products.map((product) => (
+                            <motion.div
+                                key={product.id}
+                                animate={{ opacity: 1 }}
+                                initial={{ opacity: 0 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <ProductCard product={product} />
+                            </motion.div>
+                        ))}
+                    </div>
+                    {products.length > 0 && <Pagination />}
+                </>
+            ) : (
                 <div data-widget="searchResultsError" className={styles.notfound}>
                     <div className={styles.notfound__icon}>
                         <Image
@@ -51,6 +69,7 @@ const App = () => {
                     </div>
                 </div>
             )}
+
         </div>
     );
 };

@@ -10,6 +10,7 @@ interface ProductStore {
     limit: number;
     skip: number;
     isLoading: boolean;
+    isFetched: boolean;
     error: string | null;
     getProducts: (searchParams: string) => Promise<boolean>;
 }
@@ -20,10 +21,11 @@ const useProductStore = create<ProductStore>()(persist((set) => ({
     limit: 0,
     skip: 0,
     isLoading: false,
+    isFetched: false,
     error: null,
     getProducts: async (searchParams: string) => {
         try {
-            set({ isLoading: true });
+            set({ isLoading: true, isFetched: true });
             const response = await api.get('/products' + searchParams + '&limit=12&select=id,title,category,price,thumbnail');
             set({ products: response.data.products, total: response.data.total, limit: response.data.limit, skip: response.data.skip });
             return true;

@@ -1,0 +1,39 @@
+@use '@/styles/_variables.scss' as *;
+
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    .button,
+    .currentPage {
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .button {
+        border: 1px solid $primary-background-color;
+        width: 30px;
+        height: 30px;
+        background-color: #fff;
+        color: $secondary-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover {
+            background-color: $primary-background-color;
+            color: #fff;
+        }
+    }
+
+    .currentPage {
+        padding: 6px 10px;
+        border: none;
+        background-color: $primary-background-color;
+        color: #fff;
+    }
+}
