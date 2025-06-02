@@ -40,6 +40,6 @@
     "node_modules",
     "eslint.config.js",
     "stylelint.config.js",
-    "next.config.js"
+    "next.config.cjs"
   ]
 }

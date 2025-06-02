@@ -1,36 +1,33 @@
-import js from '@eslint/js';
-import next from 'eslint-config-next';
-import prettier from 'eslint-config-prettier';
-import eslintPluginReactHooks from 'eslint-plugin-react-hooks';
-import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { FlatCompat } from '@eslint/eslintrc';
 
-export default [
-  js.configs.recommended,
-  ...next(),
-  {
-    plugins: {
-      'react-hooks': eslintPluginReactHooks,
-      'unused-imports': eslintPluginUnusedImports,
-    },
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
+  ...compat.config({
+    extends: [
+      'next/core-web-vitals',
+      'next/typescript',
+      'prettier',
+    ],
     rules: {
-      // React Hooks best practices
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-
-      // Unused imports and variables
+      semi: ['error', 'always'],
+      quotes: ['error', 'single'],
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-      'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': [
-        'warn',
-        {
-          vars: 'all',
-          varsIgnorePattern: '^_',
-          args: 'after-used',
-          argsIgnorePattern: '^_',
-        },
-      ],
+      '@typescript-eslint/no-unused-vars': ['warn', {
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      }],
     },
-  },
-  prettier,
+    ignorePatterns: ['node_modules/**'],
+  }),
 ];
+
+export default eslintConfig;
