@@ -5,6 +5,7 @@ import { useProductStore } from '@/store/product/useProductStore';
 import { formatParams } from '@/utils/formatParams';
 import ProductCard from '@/components/product/ProductCard';
 import { motion } from 'framer-motion';
+import styles from '@/styles/main/App.module.scss';
 
 const App = () => {
     const { products, getProducts } = useProductStore((state) => state);
@@ -16,7 +17,7 @@ const App = () => {
     }, [searchParams, getProducts]);
 
     return (
-        <div>
+        <div className={styles.container}>
             {products.length > 0 ? products.map((product) => (
                 <motion.div
                     key={product.id}
