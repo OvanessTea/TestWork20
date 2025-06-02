@@ -59,6 +59,10 @@ const Navbar = () => {
 
     useEffect(() => {
         setTabs([{ slug: 'all', name: 'All', url: '/' }, ...categories]);
+        const currentTab = searchParams.get('category');
+        if (currentTab) {
+            setActiveTab(categories.find((category) => category.slug === currentTab) || null);
+        }
     }, [categories]);
 
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -71,12 +75,29 @@ const Navbar = () => {
         scrollRef.current?.scrollBy({ left: 850, behavior: 'smooth' });
     };
 
+    const categoryRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+    useEffect(() => {
+        if (activeTab && categoryRefs.current[activeTab.slug]) {
+            const el = categoryRefs.current[activeTab.slug];
+            el?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }, [activeTab]);
+
     return <div className={styles.wrapper}>
         <div className={styles.container}>
             {tabs.length > 10 && <button className={`${styles.scrollBtn} ${styles.left}`} onClick={scrollLeft}>‹</button>}
             <div ref={scrollRef} className={styles.tabs}>
                 {tabs.map((tab) => (
-                    <button onClick={() => toggleCategory(tab)} key={tab.slug} className={`${activeTab?.slug === tab.slug ? styles.active : ''}`}>
+                    <button 
+                        onClick={() => toggleCategory(tab)} 
+                        key={tab.slug} 
+                        className={`${activeTab?.slug === tab.slug ? styles.active : ''}`}
+                        ref={(el) => {
+                            if (el) {
+                                categoryRefs.current[tab.slug] = el;
+                            }
+                        }}
+                    >
                         {tab.name}
                     </button>
                 ))}

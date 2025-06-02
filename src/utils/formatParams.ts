@@ -3,7 +3,6 @@ export const formatParams = (searchParams: URLSearchParams) => {
     
     const obj = Object.fromEntries(searchParams.entries());
     let params = '';
-    
     if (searchParams.get('category')) {
         params += `/category/${searchParams.get('category')}`;
         
