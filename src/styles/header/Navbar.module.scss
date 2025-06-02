@@ -5,6 +5,7 @@
     background-color: #fff;
     border-bottom: 1px solid #E6EAEF;
     padding: 20px 0;
+
     .container {
         height: 100%;
         max-width: $container-width;
@@ -12,38 +13,73 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 8px;
+        overflow: hidden;
+        padding: 0 8px;
+        position: relative;
     }
+
+    .scrollBtn {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
     .tabs {
         display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        flex: 1;
+        gap: 8px;
+        padding: 8px 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE 10+ */
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
         button {
-            padding: 5px 10px;
-            background-color: transparent;
-            border-radius: 5px;
-            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 6px;
             cursor: pointer;
+
             &:hover {
                 border-color: #919191;
                 color: #919191;
                 transition: all 0.3s ease;
             }
+
             &:focus {
                 border-color: rgb(187, 18, 18);
                 color: rgb(187, 18, 18);
             }
+
             &.active {
                 border-color: rgb(105, 15, 15);
                 color: rgb(105, 15, 15);
             }
         }
     }
+
     .search {
         position: relative;
         width: 200px;
+
         input {
             height: 30px;
+
             &:focus {
                 outline: none;
                 border-color: $input-effect-border;
@@ -53,6 +89,7 @@
                 border-color: $input-effect-border;
             }
         }
+
         .searchBtn {
             position: absolute;
             right: 0rem;
@@ -66,5 +103,5 @@
             cursor: pointer;
         }
 
-        }
+    }
 }

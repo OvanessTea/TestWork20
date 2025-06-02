@@ -1,17 +1,16 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from '@/styles/header/Navbar.module.scss';
-// import { useCategoryStore } from '@/store/product/useCategoryStore';
+import { useCategoryStore } from '@/store/product/useCategoryStore';
 import { Category } from '@/types/category';
 import { useRouter } from 'next/navigation';
-import categories from '@/__mocks__/categories.json';
 import { modifyUrl } from '@/utils/modifyUrl';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
 const Navbar = () => {
     const router = useRouter();
-    // const { categories, getCategories } = useCategoryStore((state) => state);
+    const { categories, getCategories } = useCategoryStore((state) => state);
     const [tabs, setTabs] = useState<Category[]>(categories);
     const [activeTab, setActiveTab] = useState<Category | null>(null);
     const searchParams = useSearchParams();
@@ -35,7 +34,7 @@ const Navbar = () => {
             router.push(url);
         });
     };
-    
+
     const handleSearch = async () => {
         await modifyUrl((params) => {
             // Have to delete category before setting the search
@@ -54,32 +53,41 @@ const Navbar = () => {
         });
     };
 
-    // Too many categories to be displayed in the navbar :(
-    // Getting categories from the mock file
-    // You can uncomment this (and useCategoryStore) to get the categories from the API
-    // useEffect(() => {
-    //     getCategories();
-    // }, []);
+    useEffect(() => {
+        getCategories();
+    }, []);
 
-    // useEffect(() => {
-    //     setTabs([{ slug: 'all', name: 'All', url: '/' }, ...categories]);
-    // }, [categories]);
+    useEffect(() => {
+        setTabs([{ slug: 'all', name: 'All', url: '/' }, ...categories]);
+    }, [categories]);
+
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    const scrollLeft = () => {
+        scrollRef.current?.scrollBy({ left: -850, behavior: 'smooth' });
+    };
+
+    const scrollRight = () => {
+        scrollRef.current?.scrollBy({ left: 850, behavior: 'smooth' });
+    };
 
     return <div className={styles.wrapper}>
         <div className={styles.container}>
-            <div className={styles.tabs}>
+            {tabs.length > 10 && <button className={`${styles.scrollBtn} ${styles.left}`} onClick={scrollLeft}>‹</button>}
+            <div ref={scrollRef} className={styles.tabs}>
                 {tabs.map((tab) => (
                     <button onClick={() => toggleCategory(tab)} key={tab.slug} className={`${activeTab?.slug === tab.slug ? styles.active : ''}`}>
                         {tab.name}
                     </button>
                 ))}
             </div>
+            {tabs.length > 10 && <button className={`${styles.scrollBtn} ${styles.right}`} onClick={scrollRight}>›</button>}
             <div className={styles.search}>
-                <input 
-                    type="text" 
-                    placeholder="Search" 
-                    value={search} 
-                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()} 
+                <input
+                    type="text"
+                    placeholder="Search"
+                    value={search}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                     onChange={(e) => setSearch(e.target.value)}
                 />
                 <button className={styles.searchBtn} onClick={() => handleSearch()}>
