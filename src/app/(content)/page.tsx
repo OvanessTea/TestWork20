@@ -6,6 +6,7 @@ import { formatParams } from '@/utils/formatParams';
 import ProductCard from '@/components/product/ProductCard';
 import { motion } from 'framer-motion';
 import styles from '@/styles/main/App.module.scss';
+import Link from 'next/link';
 
 const App = () => {
     const { products, getProducts } = useProductStore((state) => state);
@@ -28,7 +29,23 @@ const App = () => {
                 >
                     <ProductCard product={product} />
                 </motion.div>
-            )) : <h1>No products found</h1>}
+            )) : (
+                <div data-widget="searchResultsError" className={styles.notfound}>
+                    <div className={styles.notfound__icon}>
+                        <img loading="lazy" src="https://ir.ozone.ru/mobileapp/static/wc1200/icons/not_found_error_icon.png"/>
+                    </div>
+                    <div>
+                        <div className={styles.notfound__text}>
+                            Простите, по вашему запросу товаров сейчас нет.
+                        </div>
+                        <div className={styles.notfound__link}>
+                            <Link href="/">
+                                На главную
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
