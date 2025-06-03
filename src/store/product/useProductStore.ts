@@ -27,7 +27,7 @@ const useProductStore = create<ProductStore>()(persist((set) => ({
         try {
             set({ isLoading: true, isFetched: true });
             const response = await api.get('/products' + searchParams + '&limit=12&select=id,title,category,price,thumbnail');
-            set({ products: response.data.products, total: response.data.total, limit: response.data.limit, skip: response.data.skip });
+            set({ products: response.data.products, total: response.data.total, limit: 12, skip: response.data.skip });
             return true;
         } catch (error) {
             const message =
