@@ -25,8 +25,8 @@ const useAuthStore = create<AuthState>()(
         authError: null,
         lastFetched: null,
         login: async (username: string, password: string) => {
-            if (password.length < 3) {
-                set({ authError: 'Password must be at least 3 characters long' });
+            if (password.length < 3 || username.length < 3) {
+                set({ authError: 'Username and password must be at least 3 characters long' });
                 return false;
             }
             try {

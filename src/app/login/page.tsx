@@ -65,7 +65,7 @@ export default function Login() {
                 <button
                     type='submit'
                     className={styles.submitButton}
-                    disabled={isLoading || password.length < 3}
+                    disabled={isLoading || password.length < 3 || username.length < 3}
                 >
                     LOGIN
                 </button>
