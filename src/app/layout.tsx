@@ -8,6 +8,10 @@ export default function RootLayout({
 
   return (
     <html lang='en'>
+      <head>
+        <title>Abelohost</title>
+        <link rel='icon' href='/favicon.png' />
+      </head>
       <body>
           {children}
       </body>
