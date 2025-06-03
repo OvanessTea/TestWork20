@@ -3,6 +3,7 @@ import { Product } from '@/types/product';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { AxiosError } from 'axios';
 import api from '@/lib/axios';
+import { handleApiError } from '@/utils/handleApiError';
 
 interface ProductStore {
     products: Product[];
@@ -11,7 +12,6 @@ interface ProductStore {
     skip: number;
     isLoading: boolean;
     isFetched: boolean;
-    error: string | null;
     getProducts: (searchParams: string) => Promise<boolean>;
 }
 
@@ -22,7 +22,6 @@ const useProductStore = create<ProductStore>()(persist((set) => ({
     skip: 0,
     isLoading: false,
     isFetched: false,
-    error: null,
     getProducts: async (searchParams: string) => {
         try {
             set({ isLoading: true, isFetched: true });
@@ -32,9 +31,10 @@ const useProductStore = create<ProductStore>()(persist((set) => ({
         } catch (error) {
             const message =
                 error instanceof AxiosError
-                    ? error.response?.data.message
+                    ? error?.message
                     : 'Failed to fetch products';
-            set({ error: message });
+            const code = error instanceof AxiosError ? error?.status : 500;
+            handleApiError(error, code ?? 500, message);
             return false;
         } finally {
             set({ isLoading: false });

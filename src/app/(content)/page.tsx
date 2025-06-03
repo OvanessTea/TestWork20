@@ -10,10 +10,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Pagination from '@/components/pagination/Pagination';
 import Spinner from '@/components/spinner/Spinner';
+
 const App = () => {
     const { products, getProducts, isLoading, isFetched, total } = useProductStore((state) => state);
     const searchParams = useSearchParams();
-
+    
     useEffect(() => {
         const formattedParams = formatParams(searchParams);
         getProducts(formattedParams);
@@ -29,7 +30,6 @@ const App = () => {
 
     return (
         <div className={styles.container}>
-
             {products.length > 0 ? (
                 <>
                     <div className={styles.container__products}>
@@ -69,7 +69,6 @@ const App = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };

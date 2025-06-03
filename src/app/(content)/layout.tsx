@@ -4,6 +4,7 @@ import Footer from '@/components/footer/Footer';
 import styles from '@/styles/main/App.module.scss';
 import { useEffect } from 'react';
 import { useProductStore } from '@/store/product/useProductStore';
+import Modal from '@/components/modal/Modal';
 export default function ContentLayout({
   children,
 }: {
@@ -29,6 +30,7 @@ export default function ContentLayout({
       <div className={styles.layout__footer}>
         <Footer />
       </div>
+      <Modal />
     </div>
   );
 }

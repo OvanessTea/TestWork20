@@ -3,10 +3,10 @@ import { Category } from '@/types/category';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import api from '@/lib/axios';
 import { AxiosError } from 'axios';
+import { handleApiError } from '@/utils/handleApiError';
 
 interface CategoryStore {
     categories: Category[];
-    error: string | null;
     isLoading: boolean;
     getCategories: () => Promise<boolean>;
 }
@@ -14,7 +14,6 @@ interface CategoryStore {
 const useCategoryStore = create<CategoryStore>()(
     persist((set) => ({
         categories: [],
-        error: null,
         isLoading: false,
         getCategories: async () => {
             try {
@@ -23,11 +22,12 @@ const useCategoryStore = create<CategoryStore>()(
                 set({ categories: response.data });
                 return true;
             } catch (error) {
-                if (error instanceof AxiosError) {
-                    set({ error: error.response?.data.message });
-                } else {
-                    set({ error: 'Failed to fetch categories' });
-                }
+                const message =
+                error instanceof AxiosError
+                    ? error.response?.data.message
+                    : 'Failed to fetch products';
+                const code = error instanceof AxiosError ? error?.status : 500;
+                handleApiError(error, code ?? 500, message);
                 return false;
             } finally {
                 set({ isLoading: false });

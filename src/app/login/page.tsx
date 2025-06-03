@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Spinner from '@/components/spinner/Spinner';
 
 export default function Login() {
-    const { login, user, error, isLoading } = useAuthStore((state) => state);
+    const { login, user, authError, isLoading } = useAuthStore((state) => state);
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -59,7 +59,7 @@ export default function Login() {
                         </button>
                     </div>
                     <div className={styles.errorContainer}>
-                        {error ? <div className={styles.error}>*{error}</div> : null}
+                        {authError ? <div className={styles.error}>*{authError}</div> : null}
                     </div>
                 </div>
                 <button

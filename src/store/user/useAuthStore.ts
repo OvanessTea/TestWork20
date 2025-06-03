@@ -3,10 +3,11 @@ import api from '@/lib/axios';
 import { CurrentUser } from '@/types/user';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { AxiosError } from 'axios';
+import { handleApiError } from '@/utils/handleApiError';
 
 interface AuthState {
     user: CurrentUser | null;
-    error: string | null;
+    authError: string | null;
     isLoading: boolean;
     login: (_username: string, _password: string) => Promise<boolean>;
     logout: () => void;
@@ -18,10 +19,10 @@ const useAuthStore = create<AuthState>()(
     persist((set) => ({
         user: null,
         isLoading: false,
-        error: null,
+        authError: null,
         login: async (username: string, password: string) => {
             if (password.length < 3) {
-                set({ error: 'Password must be at least 3 characters long' });
+                set({ authError: 'Password must be at least 3 characters long' });
                 return false;
             }
             try {
@@ -31,13 +32,13 @@ const useAuthStore = create<AuthState>()(
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
                 set({ user: response.data });
-                set({ error: null });
+                set({ authError: null });
                 return true;
             } catch (error) {
                 if (error instanceof AxiosError) {
-                    set({ error: error.response?.data.message });
+                    set({ authError: error.response?.data.message });
                 } else {
-                    set({ error: 'Failed to login' });
+                    set({ authError: 'Failed to login' });
                 }
                 return false;
             } finally {
@@ -50,11 +51,12 @@ const useAuthStore = create<AuthState>()(
                 const response = await api.get('/auth/me');
                 set({ user: response.data });
             } catch (error) {
-                if (error instanceof AxiosError) {
-                    set({ error: error.response?.data.message });
-                } else {
-                    set({ error: 'Failed to fetch profile' });
-                }
+                const message =
+                    error instanceof AxiosError
+                        ? error.response?.data.message
+                        : 'Failed to fetch profile';
+                const code = error instanceof AxiosError ? error?.status : 500;
+                handleApiError(error, code ?? 500, message);
             } finally {
                 set({ isLoading: false });
             }
@@ -67,11 +69,12 @@ const useAuthStore = create<AuthState>()(
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
             } catch (error) {
-                if (error instanceof AxiosError) {
-                    set({ error: error.response?.data.message });
-                } else {
-                    set({ error: 'Failed to refresh token' });
-                }
+                const message =
+                    error instanceof AxiosError
+                        ? error.response?.data.message
+                        : 'Failed to refresh token';
+                const code = error instanceof AxiosError ? error?.status : 500;
+                handleApiError(error, code ?? 500, message);
             }
         },
         logout: () => {
