@@ -28,10 +28,13 @@ const Contacts = () => {
             </div>
             <div className={styles.user}>
                 {user ? (
-                    <button onClick={logout}>
-                        <Image src='/user.svg' alt='user' width={20} height={20} />
-                        <p>Logout</p>
-                    </button>
+                    <>
+                        <p>{user.firstName} {user.lastName}</p>
+                        <button onClick={logout}>
+                            <Image src='/user.svg' alt='user' width={20} height={20} />
+                            <p>Logout</p>
+                        </button>
+                    </>
                 ) : (
                     <button onClick={() => router.push('/login')}>
                         <Image src='/user.svg' alt='user' width={20} height={20} />

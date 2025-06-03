@@ -36,6 +36,12 @@
         }
 
         .user {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            p {
+                font-size: 14px;
+            }
             button {
                 padding: 0px 5px;
                 border-radius: 5px;
