@@ -3,54 +3,35 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from '@/styles/header/Navbar.module.scss';
 import { useCategoryStore } from '@/store/product/useCategoryStore';
 import { Category } from '@/types/category';
-import { useRouter } from 'next/navigation';
-import { modifyUrl } from '@/utils/modifyUrl';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import { useUrlParams } from '@/hooks/useUrlParams';
 
 const Navbar = () => {
-    const router = useRouter();
     const { categories, getCategories } = useCategoryStore((state) => state);
     const [tabs, setTabs] = useState<Category[]>(categories);
     const [activeTab, setActiveTab] = useState<Category | null>(null);
     const searchParams = useSearchParams();
     const [search, setSearch] = useState<string>(searchParams.get('search') || '');
+    const { updateParams } = useUrlParams();
 
     const toggleCategory = async (category: Category) => {
         setActiveTab(category);
-        await modifyUrl((params) => {
-            // Have to delete search before setting the category
-            // Otherwise, the search will return 404 error
-            params.delete('search');
-            // Need to delete skip to avoid pagination error
-            params.delete('skip');
-            setSearch('');
-            if (category.slug === 'all') {
-                params.delete('category');
-            } else {
-                params.set('category', category.slug);
-            }
-        }).then((url: string) => {
-            router.push(url);
+        await updateParams({
+            search: null,
+            skip: null,
+            category: category.slug === 'all' ? null : category.slug
         });
+        setSearch('');
     };
 
     const handleSearch = async () => {
-        await modifyUrl((params) => {
-            // Have to delete category before setting the search
-            // Otherwise, the search will return 404 error
-            params.delete('category');
-            // Need to delete skip to avoid pagination error
-            params.delete('skip');
-            setActiveTab(null);
-            if (search) {
-                params.set('search', search);
-            } else {
-                params.delete('search');
-            }
-        }).then((url: string) => {
-            router.push(url);
+        await updateParams({
+            category: null,
+            skip: null,
+            search: search || null
         });
+        setActiveTab(null);
     };
 
     useEffect(() => {

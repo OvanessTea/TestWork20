@@ -1,12 +1,11 @@
 import { useProductStore } from '@/store/product/useProductStore';
 import React from 'react';
 import styles from '@/styles/pagination/Pagination.module.scss';
-import { modifyUrl } from '@/utils/modifyUrl';
-import { useRouter } from 'next/navigation';
+import { useUrlParams } from '@/hooks/useUrlParams';
 
 const Pagination = () => {
     const { total, limit, skip } = useProductStore((state) => state);
-    const router = useRouter();
+    const { updateParams } = useUrlParams();
 
     const safeTotal = Math.max(0, total);
     const safeLimit = Math.max(1, limit);
@@ -20,10 +19,8 @@ const Pagination = () => {
     }
 
     const togglePage = async (page: number) => {
-        await modifyUrl((params) => {
-            params.set('skip', `${(Math.max(1, Math.min(page, totalPages)) - 1) * safeLimit}`);
-        }).then((url: string) => {
-            router.push(url);
+        await updateParams({
+            skip: `${(Math.max(1, Math.min(page, totalPages)) - 1) * safeLimit}`
         });
     };
 
