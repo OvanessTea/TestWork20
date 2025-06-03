@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 const Modal = () => {
 
-    const { error, setError, code } = useErrorStore();
+    const { error, setError, code } = useErrorStore((state) => state);
 
     if (!error) return null; 
 

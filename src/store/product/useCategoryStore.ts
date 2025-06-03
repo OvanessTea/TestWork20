@@ -37,12 +37,12 @@ const useCategoryStore = create<CategoryStore>()(
                 });
                 return true;
             } catch (error) {
-                const message =
-                error instanceof AxiosError
-                    ? error.response?.data.message
-                    : 'Failed to fetch products';
                 const code = error instanceof AxiosError ? error?.status : 500;
-                handleApiError(error, code ?? 500, message);
+                if (code === 404) {
+                    handleApiError(404, 'No categories found');
+                } else {
+                    handleApiError(code ?? 500);
+                }
                 return false;
             } finally {
                 set({ isLoading: false });

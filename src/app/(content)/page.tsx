@@ -14,7 +14,7 @@ import Spinner from '@/components/spinner/Spinner';
 const App = () => {
     const { products, getProducts, isLoading, isFetched, total } = useProductStore((state) => state);
     const searchParams = useSearchParams();
-    
+
     useEffect(() => {
         const formattedParams = formatParams(searchParams);
         getProducts(formattedParams);

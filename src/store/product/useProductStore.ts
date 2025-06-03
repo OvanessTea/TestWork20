@@ -45,6 +45,7 @@ const useProductStore = create<ProductStore>()(persist((set, get) => ({
 
             set({ isLoading: true, isFetched: true });
             const response = await api.get('/products' + searchParams + '&limit=12&select=id,title,category,price,thumbnail');
+
             set({ 
                 products: response.data.products, 
                 total: response.data.total, 
@@ -55,12 +56,12 @@ const useProductStore = create<ProductStore>()(persist((set, get) => ({
             });
             return true;
         } catch (error) {
-            const message =
-                error instanceof AxiosError
-                    ? error?.message
-                    : 'Failed to fetch products';
             const code = error instanceof AxiosError ? error?.status : 500;
-            handleApiError(error, code ?? 500, message);
+            if (code === 404) {
+                handleApiError(404, 'No products found');
+            } else {
+                handleApiError(code ?? 500);
+            }
             return false;
         } finally {
             set({ isLoading: false });

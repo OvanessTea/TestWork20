@@ -69,12 +69,9 @@ const useAuthStore = create<AuthState>()(
                     lastFetched: now
                 });
             } catch (error) {
-                const message =
-                    error instanceof AxiosError
-                        ? error.response?.data.message
-                        : 'Failed to fetch profile';
+                const message = 'Failed to fetch profile';
                 const code = error instanceof AxiosError ? error?.status : 500;
-                handleApiError(error, code ?? 500, message);
+                handleApiError(code ?? 500, message);
             } finally {
                 set({ isLoading: false });
             }
@@ -87,12 +84,9 @@ const useAuthStore = create<AuthState>()(
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
             } catch (error) {
-                const message =
-                    error instanceof AxiosError
-                        ? error.response?.data.message
-                        : 'Failed to refresh token';
+                const message = 'Failed to get user data';
                 const code = error instanceof AxiosError ? error?.status : 500;
-                handleApiError(error, code ?? 500, message);
+                handleApiError(code ?? 500, message);
             }
         },
         logout: () => {
