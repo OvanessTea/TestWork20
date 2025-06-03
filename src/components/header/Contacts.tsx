@@ -4,6 +4,7 @@ import useAuthStore from '@/store/user/useAuthStore';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/header/Contacts.module.scss';
 import Image from 'next/image';
+import { CONTACT_INFO } from '@/constants/contact_info';
 
 const Contacts = () => {
     const router = useRouter();
@@ -14,16 +15,15 @@ const Contacts = () => {
             <div className={styles.contacts}>
                 <div className={styles.section}>
                     <Image src='/phone.svg' alt='phone' width={20} height={20} />
-                    <p>+021-95-51-84</p>
+                    <p>{CONTACT_INFO.phone}</p>
                 </div>
                 <div className={styles.section}>
                     <Image src='/mail.svg' alt='email' width={20} height={20} />
-                    <p>shop@abelohost.com</p>
+                    <p>{CONTACT_INFO.email}</p>
                 </div>
                 <div className={styles.section}>
                     <Image src='/location.svg' alt='location' width={20} height={20} />
-
-                    <p>173 Stonecoal Road</p>
+                    <p>{CONTACT_INFO.address}</p>
                 </div>
             </div>
             <div className={styles.user}>
