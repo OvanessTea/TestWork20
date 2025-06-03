@@ -4,7 +4,9 @@
     width: 100%;
     padding: 10px 0;
     background-color: #1E1F29;
-
+    @media (max-width: $breakpoint-xl) {
+        padding: 10px 10px;
+    }
     .content {
         display: flex;
         justify-content: space-between;
@@ -26,6 +28,10 @@
                 img {
                     color: red;
                 }
+            }
+
+            @media (max-width: $breakpoint-md) {
+                display: none;
             }
         }
 
