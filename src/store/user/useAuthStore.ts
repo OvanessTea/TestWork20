@@ -9,17 +9,21 @@ interface AuthState {
     user: CurrentUser | null;
     authError: string | null;
     isLoading: boolean;
+    lastFetched: number | null;
     login: (_username: string, _password: string) => Promise<boolean>;
     logout: () => void;
     getProfile: () => Promise<void>;
     refreshToken: () => Promise<void>;
 }
 
+const CACHE_DURATION = 5 * 60 * 1000;
+
 const useAuthStore = create<AuthState>()(
-    persist((set) => ({
+    persist((set, get) => ({
         user: null,
         isLoading: false,
         authError: null,
+        lastFetched: null,
         login: async (username: string, password: string) => {
             if (password.length < 3) {
                 set({ authError: 'Password must be at least 3 characters long' });
@@ -31,8 +35,11 @@ const useAuthStore = create<AuthState>()(
 
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
-                set({ user: response.data });
-                set({ authError: null });
+                set({ 
+                    user: response.data,
+                    authError: null,
+                    lastFetched: typeof window !== 'undefined' ? Date.now() : 0
+                });
                 return true;
             } catch (error) {
                 if (error instanceof AxiosError) {
@@ -47,9 +54,20 @@ const useAuthStore = create<AuthState>()(
         },
         getProfile: async () => {
             try {
+                const now = typeof window !== 'undefined' ? Date.now() : 0;
+                const lastFetched = get().lastFetched;
+                
+                // Return if cached data is still valid
+                if (lastFetched && now - lastFetched < CACHE_DURATION && get().user) {
+                    return;
+                }
+
                 set({ isLoading: true });
                 const response = await api.get('/auth/me');
-                set({ user: response.data });
+                set({ 
+                    user: response.data,
+                    lastFetched: now
+                });
             } catch (error) {
                 const message =
                     error instanceof AxiosError
@@ -80,12 +98,18 @@ const useAuthStore = create<AuthState>()(
         logout: () => {
             localStorage.removeItem('token');
             localStorage.removeItem('refreshToken');
-            set({ user: null });
+            set({ 
+                user: null,
+                lastFetched: null
+            });
         }
     }), {
         name: 'auth-storage',
         storage: createJSONStorage(() => localStorage),
-        partialize: (state) => ({ user: state.user })
+        partialize: (state) => ({ 
+            user: state.user,
+            lastFetched: state.lastFetched
+        })
     })
 );
 

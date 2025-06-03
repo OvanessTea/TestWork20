@@ -8,18 +8,33 @@ import { handleApiError } from '@/utils/handleApiError';
 interface CategoryStore {
     categories: Category[];
     isLoading: boolean;
+    lastFetched: number | null;
     getCategories: () => Promise<boolean>;
 }
 
+const CACHE_DURATION = 5 * 60 * 1000;
+
 const useCategoryStore = create<CategoryStore>()(
-    persist((set) => ({
+    persist((set, get) => ({
         categories: [],
         isLoading: false,
+        lastFetched: null,
         getCategories: async () => {
             try {
+                const now = typeof window !== 'undefined' ? Date.now() : 0;
+                const lastFetched = get().lastFetched;
+                
+                // Return cached data if it's still valid
+                if (lastFetched && now - lastFetched < CACHE_DURATION && get().categories.length > 0) {
+                    return true;
+                }
+
                 set({ isLoading: true });
                 const response = await api.get('/products/categories');
-                set({ categories: response.data });
+                set({ 
+                    categories: response.data,
+                    lastFetched: now
+                });
                 return true;
             } catch (error) {
                 const message =
@@ -36,9 +51,11 @@ const useCategoryStore = create<CategoryStore>()(
     }), {
         name: 'category-storage',
         storage: createJSONStorage(() => localStorage),
-        partialize: (state) => ({ categories: state.categories }),
+        partialize: (state) => ({ 
+            categories: state.categories,
+            lastFetched: state.lastFetched 
+        }),
     })
 );
 
 export { useCategoryStore };
-
