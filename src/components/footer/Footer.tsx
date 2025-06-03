@@ -1,6 +1,6 @@
-import { CONTACT_INFO } from '@/constants/contact_info';
 import useAuthStore from '@/store/user/useAuthStore';
 import styles from '@/styles/footer/Footer.module.scss';
+import { CONTACT_INFO } from '@/constants/contact';
 
 export default function Footer() {
     const { user } = useAuthStore((state) => state);
