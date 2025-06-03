@@ -1,5 +1,8 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
+interface ExtendedInternalAxiosRequestConfig extends InternalAxiosRequestConfig {
+    _retry?: boolean;
+}
 
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -23,16 +26,19 @@ api.interceptors.response.use(
         if (
             error.response?.status === 401 &&
             originalRequest &&
-            !originalRequest.url?.includes('/auth')
+            !originalRequest.url?.includes('/auth') &&
+            // try to retake token only once to avoid infinite loop
+            !(originalRequest as ExtendedInternalAxiosRequestConfig)._retry
         ) {
             try {
+                (originalRequest as ExtendedInternalAxiosRequestConfig)._retry = true;
                 const oldRefreshToken = localStorage.getItem('refreshToken');
                 if (oldRefreshToken) {
                     // Refresh the token
                     const response = await api.post('/auth/refresh', {
                         refreshToken: oldRefreshToken,
                     });
-                    
+
                     const { accessToken, refreshToken } = response.data;
                     localStorage.setItem('token', accessToken);
                     localStorage.setItem('refreshToken', refreshToken);

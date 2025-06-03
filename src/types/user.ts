@@ -9,8 +9,8 @@ const LoggedUserSchema = z.object({
         lastName: z.string(),
         gender: z.string(),
         image: z.string(),
-        accessToken: z.string(), // JWT accessToken (for backward compatibility) in response and cookies
-        refreshToken: z.string() // refreshToken in response and cookies      
+        accessToken: z.string(),
+        refreshToken: z.string()    
 });
 
 const CurrentUserSchema = z.object({
