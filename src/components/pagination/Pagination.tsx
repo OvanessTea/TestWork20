@@ -5,50 +5,87 @@ import { modifyUrl } from '@/utils/modifyUrl';
 import { useRouter } from 'next/navigation';
 
 const Pagination = () => {
-
     const { total, limit, skip } = useProductStore((state) => state);
     const router = useRouter();
 
-    const currentPage = Math.floor(skip / limit) + 1;
-    const totalPages = Math.ceil(total / limit);
+    const safeTotal = Math.max(0, total);
+    const safeLimit = Math.max(1, limit);
+    const safeSkip = Math.max(0, skip);
+
+    const currentPage = Math.floor(safeSkip / safeLimit) + 1;
+    const totalPages = Math.max(1, Math.ceil(safeTotal / safeLimit));
+
+    if (totalPages <= 1) {
+        return null;
+    }
 
     const togglePage = async (page: number) => {
         await modifyUrl((params) => {
-            params.set('skip', `${(Math.max(1, Math.min(page, totalPages)) - 1) * limit}`);
+            params.set('skip', `${(Math.max(1, Math.min(page, totalPages)) - 1) * safeLimit}`);
         }).then((url: string) => {
             router.push(url);
         });
     };
 
+    const getPageRange = (start: number, end: number) => {
+        return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    };
+
+    let pages: (number | string)[] = [];
+    
+    if (totalPages <= 5) {
+        pages = getPageRange(1, totalPages);
+    } else {
+        pages.push(1);
+        
+        const start = Math.max(2, currentPage - 1);
+        const end = Math.min(totalPages - 1, currentPage + 1);
+        
+        if (start > 2) {
+            pages.push('...');
+        }
+        
+        pages.push(...getPageRange(start, end));
+        
+        if (end < totalPages - 1) {
+            pages.push('...');
+        }
+        
+        pages.push(totalPages);
+    }
+
     return (
         <div className={styles.container}>
-            {currentPage > 1 && (
-                <>
-                    <button className={styles.button} onClick={() => togglePage(1)}>1</button>
-                    {currentPage > 3 && <span>…</span>}
-                </>
-            )}
+            <button 
+                className={styles.button} 
+                onClick={() => togglePage(currentPage - 1)}
+                disabled={currentPage === 1}
+            >
+                &lt;
+            </button>
 
-            {currentPage > 2 && (
-                <button className={styles.button} onClick={() => togglePage(currentPage - 1)}>
-                    {currentPage - 1}
-                </button>
-            )}
+            {pages.map((page, index) => {
+                if (page === '...') {
+                    return <span key={`ellipsis-${index}`}>…</span>;
+                }
+                return (
+                    <button
+                        key={page}
+                        className={`${styles.button} ${page === currentPage ? styles.currentPage : ''}`}
+                        onClick={() => togglePage(page as number)}
+                    >
+                        {page}
+                    </button>
+                );
+            })}
 
-            <span className={styles.currentPage}>{currentPage}</span>
-
-            {currentPage < totalPages - 1 && (
-                <button className={styles.button} onClick={() => togglePage(currentPage + 1)}>
-                    {currentPage + 1}
-                </button>
-            )}
-
-            {currentPage < totalPages - 2 && (
-                <>
-                    <span>…</span>
-                    <button className={styles.button} onClick={() => togglePage(totalPages)}>{totalPages}</button>
-                </>
-            )}
+            <button 
+                className={styles.button} 
+                onClick={() => togglePage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+            >
+                &gt;
+            </button>
         </div>
     );
 };
