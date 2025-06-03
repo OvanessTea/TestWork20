@@ -15,47 +15,50 @@ interface CategoryStore {
 const CACHE_DURATION = 5 * 60 * 1000;
 
 const useCategoryStore = create<CategoryStore>()(
-    persist((set, get) => ({
-        categories: [],
-        isLoading: false,
-        lastFetched: null,
-        getCategories: async () => {
-            try {
-                const now = typeof window !== 'undefined' ? Date.now() : 0;
-                const lastFetched = get().lastFetched;
-                
-                // Return cached data if it's still valid
-                if (lastFetched && now - lastFetched < CACHE_DURATION && get().categories.length > 0) {
-                    return true;
-                }
+    persist(
+        (set, get) => ({
+            categories: [],
+            isLoading: false,
+            lastFetched: null,
+            getCategories: async () => {
+                try {
+                    const now = typeof window !== 'undefined' ? Date.now() : 0;
+                    const lastFetched = get().lastFetched;
 
-                set({ isLoading: true });
-                const response = await api.get('/products/categories');
-                set({ 
-                    categories: response.data,
-                    lastFetched: now
-                });
-                return true;
-            } catch (error) {
-                const code = error instanceof AxiosError ? error?.status : 500;
-                if (code === 404) {
-                    handleApiError(404, 'No categories found');
-                } else {
-                    handleApiError(code ?? 500);
+                    // Return cached data if it's still valid
+                    if (lastFetched && now - lastFetched < CACHE_DURATION && get().categories.length > 0) {
+                        return true;
+                    }
+
+                    set({ isLoading: true });
+                    const response = await api.get('/products/categories');
+                    set({
+                        categories: response.data,
+                        lastFetched: now
+                    });
+                    return true;
+                } catch (error) {
+                    const code = error instanceof AxiosError ? error?.status : 500;
+                    if (code === 404) {
+                        handleApiError(404, 'No categories found');
+                    } else {
+                        handleApiError(code ?? 500);
+                    }
+                    return false;
+                } finally {
+                    set({ isLoading: false });
                 }
-                return false;
-            } finally {
-                set({ isLoading: false });
             }
-        }
-    }), {
-        name: 'category-storage',
-        storage: createJSONStorage(() => localStorage),
-        partialize: (state) => ({ 
-            categories: state.categories,
-            lastFetched: state.lastFetched 
         }),
-    })
+        {
+            name: 'category-storage',
+            storage: createJSONStorage(() => localStorage),
+            partialize: (state) => ({
+                categories: state.categories,
+                lastFetched: state.lastFetched
+            }),
+        }
+    )
 );
 
 export { useCategoryStore };

@@ -7,12 +7,14 @@ interface ErrorStore {
     setCode: (code: number | null) => void;
 }
 
-const useErrorStore = create<ErrorStore>((set) => ({
-    error: null,
-    code: null,
-    setError: (error: string | null) => set({ error }),
-    setCode: (code: number | null) => set({ code }),
-}));
+const useErrorStore = create<ErrorStore>(
+    (set) => ({
+        error: null,
+        code: null,
+        setError: (error: string | null) => set({ error }),
+        setCode: (code: number | null) => set({ code }),
+    })
+);
 
 export default useErrorStore;
 
