@@ -46,14 +46,17 @@ const ProductCard = ({ product }: { product: Product }) => {
                     Add to Cart
                 </button>
             )}
-            {isLoading ? (
-                <Spinner />
-            ) : null}
-            {isSuccess ? (
-                <motion.div className={styles.success} initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1.75 }} transition={{ duration: 0.2 }}>
+            {isLoading && <Spinner />}
+            {isSuccess && (
+                <motion.div 
+                    className={styles.success} 
+                    initial={{ opacity: 0, scale: 0 }} 
+                    animate={{ opacity: 1, scale: 1.75 }} 
+                    transition={{ duration: 0.2 }}
+                >
                     <Image src="/check.svg" alt="Success" width={100} height={100} />
                 </motion.div>
-            ) : null}
+            )}
         </div>
     );
 };
