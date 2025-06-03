@@ -63,7 +63,7 @@ const App = () => {
                         </div>
                         <div className={styles.notfound__link}>
                             <Link href="/">
-                                Back to home
+                                Reset filters
                             </Link>
                         </div>
                     </div>
