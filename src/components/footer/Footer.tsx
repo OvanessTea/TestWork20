@@ -7,7 +7,7 @@ export default function Footer() {
     return (
         <footer>
             <div className={styles.container}>
-                <p>{new Date().getFullYear()}</p>
+                <p>2025</p>
                 <p>{user ? `Logged as ${user.email}` : ''}</p>
             </div>
         </footer>
