@@ -34,7 +34,7 @@ const useAuthStore = create<AuthState>()(
                     set({ isLoading: true });
                     const response = await api.post('/auth/login', { username, password });
 
-                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('token', response.data.accessToken);
                     localStorage.setItem('refreshToken', response.data.refreshToken);
                     set({
                         user: response.data,
@@ -72,6 +72,10 @@ const useAuthStore = create<AuthState>()(
                 } catch (error) {
                     const message = 'Failed to fetch profile';
                     const code = error instanceof AxiosError ? error?.status : 500;
+                    if (code === 401) {
+                        get().logout();
+                        return;
+                    }
                     handleApiError(code ?? 500, message);
                 } finally {
                     set({ isLoading: false });
@@ -82,7 +86,7 @@ const useAuthStore = create<AuthState>()(
                     const response = await api.post('/auth/refresh', {
                         refreshToken: localStorage.getItem('refreshToken'),
                     });
-                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('token', response.data.accessToken);
                     localStorage.setItem('refreshToken', response.data.refreshToken);
                 } catch (error) {
                     const message = 'Failed to get user data';
@@ -104,6 +108,7 @@ const useAuthStore = create<AuthState>()(
             storage: createJSONStorage(() => localStorage),
             partialize: (state) => ({
                 user: state.user,
+                login: state.login,
                 lastFetched: state.lastFetched
             })
         }

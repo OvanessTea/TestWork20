@@ -1,4 +1,5 @@
 import '../styles/global.scss';
+import AuthProvider from '@/components/auth/AuthProvider';
 
 export default function RootLayout({
   children,
@@ -13,7 +14,9 @@ export default function RootLayout({
         <link rel='icon' href='/favicon.png' />
       </head>
       <body>
+        <AuthProvider>
           {children}
+        </AuthProvider>
       </body>
     </html>
   );
